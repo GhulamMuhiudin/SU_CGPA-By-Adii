@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CGPA Calculator</title>
+<style>
+body {
+    font-family: Arial;
+    background: #f4f6f9;
+    text-align: center;
+}
+
+.container {
+    width: 90%;
+    max-width: 600px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    margin-top: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+input {
+    padding: 10px;
+    margin: 5px;
+    width: 120px;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 10px;
+    border: none;
+    background: #007bff;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #0056b3;
+}
+
+h2 {
+    margin-bottom: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>🎓 CGPA Calculator</h2>
+
+<!-- MODE SELECT -->
+<select id="mode" onchange="changeMode()">
+    <option value="sem">Single Semester</option>
+    <option value="year">Year (2 Semesters)</option>
+    <option value="all">Full CGPA (8 Semesters)</option>
+</select>
+
+<div id="inputs"></div>
+
+<button onclick="calculate()">Calculate</button>
+
+<h3 id="result"></h3>
+
+</div>
+
+<script>
+
+// CREATE INPUTS DYNAMICALLY
+function changeMode() {
+    let mode = document.getElementById("mode").value;
+    let div = document.getElementById("inputs");
+    div.innerHTML = "";
+
+    if (mode === "sem") {
+        div.innerHTML = `
+            <p>Enter Total Quality Points & Credit Hours</p>
+            <input id="qp1" type="number" placeholder="Total QP">
+            <input id="ch1" type="number" placeholder="Credit Hours">
+        `;
+    }
+
+    else if (mode === "year") {
+        div.innerHTML = `
+            <p>Semester 1</p>
+            <input id="qp1" type="number" placeholder="QP">
+            <input id="ch1" type="number" placeholder="CH">
+
+            <p>Semester 2</p>
+            <input id="qp2" type="number" placeholder="QP">
+            <input id="ch2" type="number" placeholder="CH">
+        `;
+    }
+
+    else if (mode === "all") {
+        for (let i = 1; i <= 8; i++) {
+            div.innerHTML += `
+                <p>Semester ${i}</p>
+                <input id="qp${i}" type="number" placeholder="QP">
+                <input id="ch${i}" type="number" placeholder="CH">
+            `;
+        }
+    }
+}
+
+changeMode();
+
+// CALCULATION LOGIC
+function calculate() {
+    let mode = document.getElementById("mode").value;
+    let totalQP = 0;
+    let totalCH = 0;
+
+    if (mode === "sem") {
+        totalQP = Number(document.getElementById("qp1").value);
+        totalCH = Number(document.getElementById("ch1").value);
+    }
+
+    else if (mode === "year") {
+        totalQP =
+            Number(qp1.value) + Number(qp2.value);
+
+        totalCH =
+            Number(ch1.value) + Number(ch2.value);
+    }
+
+    else if (mode === "all") {
+        for (let i = 1; i <= 8; i++) {
+            totalQP += Number(document.getElementById("qp" + i).value || 0);
+            totalCH += Number(document.getElementById("ch" + i).value || 0);
+        }
+    }
+
+    let cgpa = totalQP / totalCH;
+
+    document.getElementById("result").innerText =
+        totalCH ? "Result CGPA: " + cgpa.toFixed(2) : "Enter valid data";
+}
+
+</script>
+
+</body>
+</html>
